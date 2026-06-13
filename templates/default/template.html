@@ -13,7 +13,45 @@
             background: #f5f5f5;
             color: #333;
             line-height: 1.7;
+            padding-top: 56px;
         }
+        .global-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 56px;
+            background: #fff;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 30px;
+            z-index: 1000;
+        }
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            color: #1890ff;
+        }
+        .nav-brand a {
+            color: #1890ff;
+            text-decoration: none;
+        }
+        .nav-links {
+            display: flex;
+            gap: 24px;
+        }
+        .nav-links a {
+            color: #666;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover { color: #1890ff; }
         .resume {
             max-width: 960px;
             margin: 40px auto;
@@ -186,7 +224,17 @@
     </style>
 </head>
 <body>
-    <div class="resume">
+    <nav class="global-nav">
+        <div class="nav-brand">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="#1890ff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+            <a href="../../index.html">简历生成器</a>
+        </div>
+        <div class="nav-links">
+            <a href="../../index.html">首页</a>
+            <a href="../../editor/">编辑器</a>
+            <a href="../default/template.html">模板预览</a>
+        </div>
+    </nav>
         <aside class="sidebar">
             <img id="avatar" class="avatar" alt="头像">
             <h1 id="name" class="name"></h1>

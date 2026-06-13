@@ -13,34 +13,44 @@
             background: #f5f5f5;
             color: #333;
             min-height: 100vh;
+            padding-top: 56px;
         }
 
-        /* Header */
-        .header {
+        /* Global Nav */
+        .global-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 56px;
             background: #fff;
-            padding: 20px 40px;
             border-bottom: 1px solid #eee;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 0 30px;
+            z-index: 1000;
         }
-        .logo {
-            font-size: 20px;
-            font-weight: 700;
-            color: #1890ff;
+        .nav-brand {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            color: #1890ff;
         }
-        .logo svg { width: 28px; height: 28px; fill: #1890ff; }
-        .nav { display: flex; gap: 24px; }
-        .nav a {
+        .nav-brand svg { width: 24px; height: 24px; fill: #1890ff; }
+        .nav-links {
+            display: flex;
+            gap: 24px;
+        }
+        .nav-links a {
             color: #666;
             text-decoration: none;
             font-size: 14px;
             transition: color 0.2s;
         }
-        .nav a:hover { color: #1890ff; }
+        .nav-links a:hover { color: #1890ff; }
 
         /* Hero */
         .hero {
@@ -178,17 +188,17 @@
     </style>
 </head>
 <body>
-    <header class="header">
-        <div class="logo">
+    <nav class="global-nav">
+        <div class="nav-brand">
             <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
-            简历生成器
+            <a href="index.html">简历生成器</a>
         </div>
-        <nav class="nav">
-            <a href="templates/default/template.html?data=../data/sample.json">预览模板</a>
-            <a href="editor/">开始制作</a>
-            <a href="data/resume.json">JSON数据</a>
-        </nav>
-    </header>
+        <div class="nav-links">
+            <a href="index.html">首页</a>
+            <a href="editor/">编辑器</a>
+            <a href="templates/default/template.html">模板预览</a>
+        </div>
+    </nav>
 
     <section class="hero">
         <h1>用 <span>JSON</span> 驱动的<br>简历生成器</h1>
