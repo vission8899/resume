@@ -213,18 +213,23 @@
         }
         .print-btn:hover { background: #096dd9; transform: translateY(-2px); }
         @media print {
-            body { 
-                padding-top: 0 !important;
-                background: #fff !important;
+            html, body {
+                width: 960px;
+                margin: 0;
+                padding: 0;
+                background: #fff;
+            }
+            body {
+                padding-top: 0;
             }
             .global-nav { display: none !important; }
             .print-btn { display: none !important; }
-            .resume { 
-                display: grid !important;
-                grid-template-columns: 260px 1fr !important;
-                margin: 0 !important;
-                box-shadow: none !important;
-                max-width: none !important;
+            .resume {
+                width: 960px;
+                max-width: 960px;
+                margin: 0;
+                box-shadow: none;
+                border-radius: 0;
             }
         }
         @media (max-width: 768px) {
