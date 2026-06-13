@@ -213,9 +213,20 @@
         }
         .print-btn:hover { background: #096dd9; transform: translateY(-2px); }
         @media print {
-            body { background: #fff; }
-            .resume { margin: 0; box-shadow: none; }
+            body { background: #fff; padding-top: 0; }
+            .global-nav { display: none; }
+            .resume { 
+                margin: 0; 
+                box-shadow: none; 
+                max-width: 100%;
+                min-height: auto;
+                border-radius: 0;
+            }
             .print-btn { display: none; }
+            .sidebar { padding: 30px 24px; }
+            .main { padding: 30px 36px; }
+            .project-item { break-inside: avoid; }
+            .work-item { break-inside: avoid; }
         }
         @media (max-width: 768px) {
             .resume { grid-template-columns: 1fr; margin: 0; }
