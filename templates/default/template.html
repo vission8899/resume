@@ -266,16 +266,71 @@
     <script>
         const DEFAULT_DATA_URL = '../data/resume.json';
 
+        const MOCK_DATA = {
+            "basic": {
+                "name": "张三",
+                "gender": "男",
+                "jobIntent": "Java后端工程师",
+                "phone": "13800138000",
+                "email": "zhangsan@example.com",
+                "location": "广东 深圳",
+                "avatar": "https://via.placeholder.com/120x150/eee/999?text=Photo"
+            },
+            "intent": {
+                "status": "随时入职",
+                "position": "Java后端工程师",
+                "location": "深圳市"
+            },
+            "education": [
+                {
+                    "school": "某某大学",
+                    "major": "软件工程 本科",
+                    "startDate": "2017-09",
+                    "endDate": "2021-06"
+                }
+            ],
+            "skills": [
+                { "name": "Spring", "level": "熟练" },
+                { "name": "SpringBoot", "level": "熟练" },
+                { "name": "MySQL", "level": "熟练" },
+                { "name": "Redis", "level": "掌握" },
+                { "name": "Docker", "level": "熟练" },
+                { "name": "Linux", "level": "熟练" }
+            ],
+            "work": [
+                {
+                    "company": "某某科技有限公司",
+                    "position": "Java后端工程师",
+                    "startDate": "2021-06",
+                    "endDate": "至今"
+                }
+            ],
+            "projects": [
+                {
+                    "name": "示例项目",
+                    "startDate": "2021-06",
+                    "endDate": "2022-12",
+                    "sections": [
+                        { "label": "主要功能", "content": "这是一个示例项目，用于展示简历模板效果" },
+                        { "label": "技术栈", "content": "Spring Boot、MySQL、Redis" }
+                    ]
+                }
+            ],
+            "selfEvaluation": "热爱编程，喜欢学习新技术，有良好的团队协作能力。"
+        };
+
         async function loadResume() {
             try {
                 const params = new URLSearchParams(window.location.search);
                 const dataUrl = params.get('data') || DEFAULT_DATA_URL;
                 const res = await fetch(dataUrl);
+                if (!res.ok) throw new Error('数据加载失败');
                 const data = await res.json();
                 document.title = data.basic.name + ' - 简历';
                 render(data);
             } catch (e) {
-                console.error('加载简历数据失败:', e);
+                console.log('使用默认数据');
+                render(MOCK_DATA);
             }
         }
 
