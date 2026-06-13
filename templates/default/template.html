@@ -213,9 +213,17 @@
         }
         .print-btn:hover { background: #096dd9; transform: translateY(-2px); }
         @media print {
-            body { padding-top: 0; }
-            .global-nav { display: none; }
-            .print-btn { display: none; }
+            body { 
+                padding-top: 0 !important;
+                background: #fff !important;
+            }
+            .global-nav { display: none !important; }
+            .print-btn { display: none !important; }
+            .resume { 
+                margin: 0 !important;
+                box-shadow: none !important;
+                max-width: none !important;
+            }
         }
         @media (max-width: 768px) {
             .resume { grid-template-columns: 1fr; margin: 0; }
