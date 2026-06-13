@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>简历</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.7;
+        }
+        .resume {
+            max-width: 960px;
+            margin: 40px auto;
+            background: #fff;
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+            min-height: 100vh;
+        }
+        .sidebar {
+            background: #fafafa;
+            padding: 40px 28px;
+            border-right: 1px solid #eee;
+        }
+        .avatar {
+            width: 120px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin: 0 auto 20px;
+            display: block;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .name {
+            font-size: 24px;
+            font-weight: 700;
+            color: #222;
+            margin-bottom: 4px;
+            text-align: center;
+        }
+        .gender {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .job-intent {
+            font-size: 13px;
+            color: #666;
+            padding-bottom: 20px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid #eee;
+            text-align: center;
+        }
+        .sidebar-section { margin-bottom: 20px; }
+        .sidebar-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #222;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .sidebar-title svg { width: 18px; height: 18px; fill: #1890ff; }
+        .info-row {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 6px;
+            line-height: 2;
+        }
+        .info-row .label { width: 42px; color: #888; font-size: 14px; }
+        .intent-row {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 4px;
+            line-height: 2;
+        }
+        .intent-row .label { color: #888; margin-right: 8px; font-size: 14px; }
+        .skill-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 6px;
+            line-height: 2;
+        }
+        .skill-row .name { color: #333; font-weight: 400; font-size: 15px; }
+        .skill-row .level { color: #1890ff; font-size: 13px; }
+        .main { padding: 40px 44px; }
+        .section { margin-bottom: 28px; }
+        .section:last-child { margin-bottom: 0; }
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #222;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section-title svg { width: 20px; height: 20px; fill: #1890ff; }
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #e8e8e8;
+            margin-left: 12px;
+        }
+        .self-eval { font-size: 14px; color: #555; line-height: 1.9; }
+        .edu-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .edu-item h4 { font-size: 15px; font-weight: 600; color: #222; }
+        .edu-item p { font-size: 13px; color: #888; }
+        .edu-item .date { font-size: 12px; color: #888; }
+        .work-item {
+            margin-bottom: 18px;
+            padding-bottom: 18px;
+            border-bottom: 1px dashed #eee;
+        }
+        .work-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .work-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        .work-header h4 { font-size: 15px; font-weight: 600; color: #222; margin-bottom: 2px; }
+        .work-header .position { font-size: 13px; color: #1890ff; }
+        .work-header .date { font-size: 12px; color: #999; }
+        .project-item { margin-bottom: 22px; }
+        .project-item:last-child { margin-bottom: 0; }
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .project-header h4 { font-size: 16px; font-weight: 700; color: #222; }
+        .project-header .date { font-size: 12px; color: #999; }
+        .project-label { font-size: 14px; font-weight: 700; color: #333; margin-bottom: 4px; }
+        .project-text {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 12px;
+        }
+        .project-text ul { padding-left: 16px; }
+        .project-text li { margin-bottom: 6px; }
+        .project-text .highlight { color: #333; font-weight: 600; text-decoration: underline; }
+        .project-text .underline { text-decoration: underline; }
+        .print-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 10px 20px;
+            background: #1890ff;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(24,144,255,0.3);
+            transition: all 0.3s ease;
+        }
+        .print-btn:hover { background: #096dd9; transform: translateY(-2px); }
+        @media print {
+            body { background: #fff; }
+            .resume { margin: 0; box-shadow: none; }
+            .print-btn { display: none; }
+        }
+        @media (max-width: 768px) {
+            .resume { grid-template-columns: 1fr; margin: 0; }
+            .sidebar { border-right: none; border-bottom: 1px solid #eee; }
+        }
+    </style>
+</head>
+<body>
+    <div class="resume">
+        <aside class="sidebar">
+            <img id="avatar" class="avatar" alt="头像">
+            <h1 id="name" class="name"></h1>
+            <p id="gender" class="gender"></p>
+            <p id="jobIntent" class="job-intent"></p>
+
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                    基本信息
+                </h3>
+                <div id="basicInfo"></div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">
+                    <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+                    联系方式
+                </h3>
+                <div id="contactInfo"></div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                    求职意向
+                </h3>
+                <div id="intentInfo"></div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">
+                    <svg viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg>
+                    职业技能
+                </h3>
+                <div id="skills"></div>
+            </div>
+        </aside>
+
+        <main class="main">
+            <section class="section">
+                <h2 class="section-title">
+                    <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                    自我评价
+                </h2>
+                <p id="selfEval" class="self-eval"></p>
+            </section>
+
+            <section class="section">
+                <h2 class="section-title">
+                    <svg viewBox="0 0 24 24"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/></svg>
+                    教育背景
+                </h2>
+                <div id="education"></div>
+            </section>
+
+            <section class="section">
+                <h2 class="section-title">
+                    <svg viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg>
+                    工作经历
+                </h2>
+                <div id="work"></div>
+            </section>
+
+            <section class="section">
+                <h2 class="section-title">
+                    <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+                    项目经历
+                </h2>
+                <div id="projects"></div>
+            </section>
+        </main>
+    </div>
+
+    <button class="print-btn" onclick="window.print()">🖨️ 打印简历</button>
+
+    <script>
+        const DEFAULT_DATA_URL = '../data/resume.json';
+
+        async function loadResume() {
+            try {
+                const params = new URLSearchParams(window.location.search);
+                const dataUrl = params.get('data') || DEFAULT_DATA_URL;
+                const res = await fetch(dataUrl);
+                const data = await res.json();
+                document.title = data.basic.name + ' - 简历';
+                render(data);
+            } catch (e) {
+                console.error('加载简历数据失败:', e);
+            }
+        }
+
+        function render(data) {
+            document.getElementById('avatar').src = data.basic.avatar;
+            document.getElementById('name').textContent = data.basic.name;
+            document.getElementById('gender').textContent = data.basic.gender;
+            document.getElementById('jobIntent').textContent = '求职意向：' + data.basic.jobIntent;
+
+            document.getElementById('basicInfo').innerHTML = `
+                <div class="info-row"><span class="label">居住地</span><span>${data.basic.location}</span></div>
+            `;
+
+            document.getElementById('contactInfo').innerHTML = `
+                <div class="info-row"><span class="label">手机</span><span>${data.basic.phone}</span></div>
+                <div class="info-row"><span class="label">邮箱</span><span>${data.basic.email}</span></div>
+            `;
+
+            document.getElementById('intentInfo').innerHTML = `
+                <div class="intent-row"><span class="label">求职状态</span>${data.intent.status}</div>
+                <div class="intent-row"><span class="label">期望职位</span>${data.intent.position}</div>
+                <div class="intent-row"><span class="label">期望地点</span>${data.intent.location}</div>
+            `;
+
+            document.getElementById('skills').innerHTML = data.skills.map(s => `
+                <div class="skill-row"><span class="name">${s.name}</span><span class="level">${s.level}</span></div>
+            `).join('');
+
+            document.getElementById('selfEval').innerHTML = data.selfEvaluation;
+
+            document.getElementById('education').innerHTML = data.education.map(e => `
+                <div class="edu-item">
+                    <div><h4>${e.school}</h4><p>${e.major}</p></div>
+                    <span class="date">${e.startDate} 至 ${e.endDate}</span>
+                </div>
+            `).join('');
+
+            document.getElementById('work').innerHTML = data.work.map(w => `
+                <div class="work-item">
+                    <div class="work-header">
+                        <div><h4>${w.company}</h4><span class="position">${w.position}</span></div>
+                        <span class="date">${w.startDate} 至 ${w.endDate}</span>
+                    </div>
+                </div>
+            `).join('');
+
+            document.getElementById('projects').innerHTML = data.projects.map(p => `
+                <div class="project-item">
+                    <div class="project-header">
+                        <h4>${p.name}</h4>
+                        <span class="date">${p.startDate} 至 ${p.endDate}</span>
+                    </div>
+                    ${p.sections.map(s => renderSection(s)).join('')}
+                </div>
+            `).join('');
+        }
+
+        function renderSection(s) {
+            let html = '';
+            if (s.label) html += `<p class="project-label">${s.label}：</p>`;
+            if (s.type === 'list') {
+                html += `<p class="project-text"><ul>${s.items.map(i => {
+                    let content = i.content || '';
+                    if (i.title) content = `<span class='highlight'>${i.title}</span>${content}`;
+                    return `<li>${content}</li>`;
+                }).join('')}</ul></p>`;
+            } else {
+                html += `<p class="project-text">${s.content}</p>`;
+            }
+            return html;
+        }
+
+        loadResume();
+    </script>
+</body>
+</html>

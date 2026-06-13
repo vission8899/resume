@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>简历编辑器</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        .header {
+            background: #fff;
+            padding: 20px 40px;
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header h1 { font-size: 20px; color: #222; }
+        .header-btns { display: flex; gap: 12px; }
+        .btn {
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+        .btn-primary { background: #1890ff; color: #fff; }
+        .btn-primary:hover { background: #096dd9; }
+        .btn-outline { background: #fff; color: #666; border: 1px solid #ddd; }
+        .btn-outline:hover { border-color: #1890ff; color: #1890ff; }
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        .card {
+            background: #fff;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+        }
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #222;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #eee;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+        .form-row.full { grid-template-columns: 1fr; }
+        .form-group { display: flex; flex-direction: column; }
+        .form-group label {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 6px;
+        }
+        .form-group input, .form-group textarea {
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #1890ff;
+        }
+        .form-group textarea { resize: vertical; min-height: 80px; }
+        .list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .list-header h4 { font-size: 14px; color: #333; }
+        .btn-add {
+            padding: 6px 14px;
+            background: #f6ffed;
+            color: #52c41a;
+            border: 1px solid #b7eb8f;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .btn-add:hover { background: #f6ffed; border-color: #52c41a; }
+        .list-item {
+            padding: 16px;
+            background: #fafafa;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            position: relative;
+            border: 1px solid #f0f0f0;
+        }
+        .list-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .list-item-header span { font-size: 13px; color: #999; }
+        .btn-remove {
+            padding: 4px 10px;
+            background: #fff2f0;
+            color: #ff4d4f;
+            border: 1px solid #ffccc7;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .btn-remove:hover { background: #ff4d4f; color: #fff; border-color: #ff4d4f; }
+        .toast {
+            position: fixed;
+            top: 80px;
+            right: 30px;
+            padding: 12px 24px;
+            background: #52c41a;
+            color: #fff;
+            border-radius: 6px;
+            font-size: 14px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transform: translateX(120%);
+            transition: transform 0.3s;
+        }
+        .toast.show { transform: translateX(0); }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📄 简历编辑器</h1>
+        <div class="header-btns">
+            <button class="btn btn-outline" onclick="importJSON()">导入 JSON</button>
+            <button class="btn btn-outline" onclick="exportJSON()">导出 JSON</button>
+            <button class="btn btn-primary" onclick="preview()">预览简历</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- 基本信息 -->
+        <div class="card">
+            <h3 class="card-title">👤 基本信息</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>姓名</label>
+                    <input type="text" id="basic.name" placeholder="请输入姓名">
+                </div>
+                <div class="form-group">
+                    <label>性别</label>
+                    <input type="text" id="basic.gender" placeholder="男/女">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>手机号</label>
+                    <input type="text" id="basic.phone" placeholder="请输入手机号">
+                </div>
+                <div class="form-group">
+                    <label>邮箱</label>
+                    <input type="email" id="basic.email" placeholder="请输入邮箱">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>求职意向</label>
+                    <input type="text" id="basic.jobIntent" placeholder="如：Java后端工程师">
+                </div>
+                <div class="form-group">
+                    <label>居住地</label>
+                    <input type="text" id="basic.location" placeholder="如：广东 深圳">
+                </div>
+            </div>
+            <div class="form-row full">
+                <div class="form-group">
+                    <label>头像URL</label>
+                    <input type="text" id="basic.avatar" placeholder="https://...">
+                </div>
+            </div>
+        </div>
+
+        <!-- 求职意向 -->
+        <div class="card">
+            <h3 class="card-title">🎯 求职意向</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>求职状态</label>
+                    <input type="text" id="intent.status" placeholder="如：随时入职">
+                </div>
+                <div class="form-group">
+                    <label>期望职位</label>
+                    <input type="text" id="intent.position" placeholder="如：Java后端工程师">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>期望地点</label>
+                    <input type="text" id="intent.location" placeholder="如：深圳市">
+                </div>
+            </div>
+        </div>
+
+        <!-- 教育背景 -->
+        <div class="card">
+            <div class="list-header">
+                <h3 class="card-title" style="margin:0;border:none;padding:0">🎓 教育背景</h3>
+                <button class="btn-add" onclick="addEducation()">+ 添加</button>
+            </div>
+            <div id="educationList"></div>
+        </div>
+
+        <!-- 职业技能 -->
+        <div class="card">
+            <div class="list-header">
+                <h3 class="card-title" style="margin:0;border:none;padding:0">⚡ 职业技能</h3>
+                <button class="btn-add" onclick="addSkill()">+ 添加</button>
+            </div>
+            <div id="skillsList"></div>
+        </div>
+
+        <!-- 工作经历 -->
+        <div class="card">
+            <div class="list-header">
+                <h3 class="card-title" style="margin:0;border:none;padding:0">💼 工作经历</h3>
+                <button class="btn-add" onclick="addWork()">+ 添加</button>
+            </div>
+            <div id="workList"></div>
+        </div>
+
+        <!-- 自我评价 -->
+        <div class="card">
+            <h3 class="card-title">💬 自我评价</h3>
+            <div class="form-row full">
+                <div class="form-group">
+                    <textarea id="selfEvaluation" rows="3" placeholder="请输入自我评价，支持换行"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <input type="file" id="fileInput" accept=".json" style="display:none" onchange="handleImport(event)">
+
+    <script>
+        let resumeData = {
+            basic: { name: '', gender: '', jobIntent: '', phone: '', email: '', location: '', avatar: '' },
+            intent: { status: '', position: '', location: '' },
+            education: [],
+            skills: [],
+            work: [],
+            projects: [],
+            selfEvaluation: ''
+        };
+
+        async function init() {
+            try {
+                const res = await fetch('../data/resume.json');
+                if (res.ok) {
+                    resumeData = await res.json();
+                    loadForm();
+                }
+            } catch (e) {
+                console.log('未找到现有数据，使用空白模板');
+            }
+        }
+
+        function loadForm() {
+            Object.keys(resumeData.basic).forEach(k => {
+                const el = document.getElementById('basic.' + k);
+                if (el) el.value = resumeData.basic[k] || '';
+            });
+            Object.keys(resumeData.intent).forEach(k => {
+                const el = document.getElementById('intent.' + k);
+                if (el) el.value = resumeData.intent[k] || '';
+            });
+            document.getElementById('selfEvaluation').value = resumeData.selfEvaluation || '';
+            renderEducation();
+            renderSkills();
+            renderWork();
+        }
+
+        function saveForm() {
+            Object.keys(resumeData.basic).forEach(k => {
+                const el = document.getElementById('basic.' + k);
+                if (el) resumeData.basic[k] = el.value;
+            });
+            Object.keys(resumeData.intent).forEach(k => {
+                const el = document.getElementById('intent.' + k);
+                if (el) resumeData.intent[k] = el.value;
+            });
+            resumeData.selfEvaluation = document.getElementById('selfEvaluation').value;
+        }
+
+        // 教育背景
+        function renderEducation() {
+            document.getElementById('educationList').innerHTML = resumeData.education.map((e, i) => `
+                <div class="list-item">
+                    <div class="list-item-header">
+                        <span>教育 ${i + 1}</span>
+                        <button class="btn-remove" onclick="removeEducation(${i})">删除</button>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>学校</label>
+                            <input type="text" value="${e.school}" onchange="resumeData.education[${i}].school=this.value">
+                        </div>
+                        <div class="form-group">
+                            <label>专业</label>
+                            <input type="text" value="${e.major}" onchange="resumeData.education[${i}].major=this.value">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>开始时间</label>
+                            <input type="text" value="${e.startDate}" placeholder="2017-09" onchange="resumeData.education[${i}].startDate=this.value">
+                        </div>
+                        <div class="form-group">
+                            <label>结束时间</label>
+                            <input type="text" value="${e.endDate}" placeholder="2021-06" onchange="resumeData.education[${i}].endDate=this.value">
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addEducation() {
+            resumeData.education.push({ school: '', major: '', startDate: '', endDate: '' });
+            renderEducation();
+        }
+
+        function removeEducation(i) {
+            resumeData.education.splice(i, 1);
+            renderEducation();
+        }
+
+        // 技能
+        function renderSkills() {
+            document.getElementById('skillsList').innerHTML = resumeData.skills.map((s, i) => `
+                <div class="list-item" style="padding:12px 16px">
+                    <div style="display:flex;gap:12px;align-items:center">
+                        <input type="text" value="${s.name}" placeholder="技能名称" style="flex:1;padding:8px 12px;border:1px solid #ddd;border-radius:4px;font-size:14px" onchange="resumeData.skills[${i}].name=this.value">
+                        <input type="text" value="${s.level}" placeholder="熟练程度" style="width:100px;padding:8px 12px;border:1px solid #ddd;border-radius:4px;font-size:14px" onchange="resumeData.skills[${i}].level=this.value">
+                        <button class="btn-remove" onclick="removeSkill(${i})">删除</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addSkill() {
+            resumeData.skills.push({ name: '', level: '' });
+            renderSkills();
+        }
+
+        function removeSkill(i) {
+            resumeData.skills.splice(i, 1);
+            renderSkills();
+        }
+
+        // 工作经历
+        function renderWork() {
+            document.getElementById('workList').innerHTML = resumeData.work.map((w, i) => `
+                <div class="list-item">
+                    <div class="list-item-header">
+                        <span>工作 ${i + 1}</span>
+                        <button class="btn-remove" onclick="removeWork(${i})">删除</button>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>公司名称</label>
+                            <input type="text" value="${w.company}" onchange="resumeData.work[${i}].company=this.value">
+                        </div>
+                        <div class="form-group">
+                            <label>职位</label>
+                            <input type="text" value="${w.position}" onchange="resumeData.work[${i}].position=this.value">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>开始时间</label>
+                            <input type="text" value="${w.startDate}" placeholder="2020-12" onchange="resumeData.work[${i}].startDate=this.value">
+                        </div>
+                        <div class="form-group">
+                            <label>结束时间</label>
+                            <input type="text" value="${w.endDate}" placeholder="至今" onchange="resumeData.work[${i}].endDate=this.value">
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addWork() {
+            resumeData.work.push({ company: '', position: '', startDate: '', endDate: '' });
+            renderWork();
+        }
+
+        function removeWork(i) {
+            resumeData.work.splice(i, 1);
+            renderWork();
+        }
+
+        // 导入导出
+        function exportJSON() {
+            saveForm();
+            const blob = new Blob([JSON.stringify(resumeData, null, 2)], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'resume.json';
+            a.click();
+            showToast('导出成功！');
+        }
+
+        function importJSON() {
+            document.getElementById('fileInput').click();
+        }
+
+        function handleImport(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                try {
+                    resumeData = JSON.parse(ev.target.result);
+                    loadForm();
+                    showToast('导入成功！');
+                } catch (err) {
+                    alert('JSON 格式错误');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function preview() {
+            saveForm();
+            const blob = new Blob([JSON.stringify(resumeData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            window.open('../templates/default/template.html?data=' + encodeURIComponent(url), '_blank');
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
+        }
+
+        init();
+    </script>
+</body>
+</html>
