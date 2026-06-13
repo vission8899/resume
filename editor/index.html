@@ -494,9 +494,8 @@
 
         function preview() {
             saveForm();
-            const blob = new Blob([JSON.stringify(resumeData, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            window.open('../templates/default/template.html?data=' + encodeURIComponent(url), '_blank');
+            localStorage.setItem('resumeData', JSON.stringify(resumeData));
+            window.open('../templates/default/template.html?source=editor', '_blank');
         }
 
         function showToast(msg) {

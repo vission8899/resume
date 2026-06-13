@@ -317,6 +317,18 @@
         async function loadResume() {
             try {
                 const params = new URLSearchParams(window.location.search);
+                const source = params.get('source');
+                
+                if (source === 'editor') {
+                    const saved = localStorage.getItem('resumeData');
+                    if (saved) {
+                        const data = JSON.parse(saved);
+                        document.title = data.basic.name + ' - 简历';
+                        render(data);
+                        return;
+                    }
+                }
+
                 const dataUrl = params.get('data') || DEFAULT_DATA_URL;
                 const res = await fetch(dataUrl);
                 if (!res.ok) throw new Error('数据加载失败');
