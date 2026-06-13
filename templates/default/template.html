@@ -213,18 +213,37 @@
         }
         .print-btn:hover { background: #096dd9; transform: translateY(-2px); }
         @media print {
-            body { background: #fff; padding-top: 0; }
-            .global-nav { display: none; }
-            .resume { 
-                margin: 0; 
-                box-shadow: none; 
-                max-width: 100%;
-                min-height: auto;
-                border-radius: 0;
+            @page {
+                size: A4;
+                margin: 0;
             }
-            .print-btn { display: none; }
-            .sidebar { padding: 30px 24px; }
-            .main { padding: 30px 36px; }
+            body { 
+                background: #fff; 
+                padding-top: 0;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .global-nav { display: none !important; }
+            .resume { 
+                display: grid !important;
+                grid-template-columns: 260px 1fr !important;
+                margin: 0 !important;
+                box-shadow: none !important;
+                max-width: 100% !important;
+                min-height: auto !important;
+                border-radius: 0 !important;
+                width: 210mm !important;
+                height: 297mm !important;
+                overflow: hidden !important;
+            }
+            .print-btn { display: none !important; }
+            .sidebar { 
+                padding: 30px 24px !important;
+                background: #fafafa !important;
+            }
+            .main { 
+                padding: 30px 36px !important;
+            }
             .project-item { break-inside: avoid; }
             .work-item { break-inside: avoid; }
         }
